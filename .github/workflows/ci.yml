@@ -1,0 +1,22 @@
+name: ESP32 Motor Logic CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build and run unit tests
+        run: |
+          g++ -std=c++17 \
+              test/test_motor_logic.cpp \
+              lib/motor_logic/motor_logic.cpp \
+              -o motor_tests
+
+          ./motor_tests
