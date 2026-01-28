@@ -1,22 +1,25 @@
 name: ESP32 Motor Logic CI
 
-on:
-  push:
-  pull_request:
+on: [push, pull_request]
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Build and run unit tests
-        run: |
-          g++ -std=c++17 \
-              test/test_motor_logic.cpp \
-              lib/motor_logic/motor_logic.cpp \
-              -o motor_tests
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
 
-          ./motor_tests
+      - name: Install PlatformIO
+        run: pip install platformio
+
+      - name: Run Build
+        run: pio run
+
+      - name: Run Unit Tests
+        run: pio test -e native
